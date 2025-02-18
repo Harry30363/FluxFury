@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
+import { motion } from "framer-motion";
 
 const Leaderboard = () => {
   const [scores, setScores] = useState([]);
@@ -14,20 +15,26 @@ const Leaderboard = () => {
     fetchScores();
   }, []);
 
-  const addScore = async (name, score) => {
-    await addDoc(collection(db, "scores"), { name, score });
-  };
-
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
-      <ul>
+      <motion.ul
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         {scores.map((score, index) => (
-          <li key={index} className="text-lg">
+          <motion.li
+            key={index}
+            initial={{ x: -100 }}
+            animate={{ x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="text-lg mb-2"
+          >
             {score.name}: {score.score}
-          </li>
+          </motion.li>
         ))}
-      </ul>
+      </motion.ul>
     </div>
   );
 };

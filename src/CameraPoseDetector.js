@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import * as tf from "@tensorflow/tfjs";
+
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,7 +9,6 @@ const CameraPoseDetector = ({ onClose }) => {
   const [model, setModel] = useState(null);
   const [count, setCount] = useState(0);
   const [feedback, setFeedback] = useState("Get ready to flex!");
-  const [exerciseType, setExerciseType] = useState("squat");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -28,13 +27,10 @@ const CameraPoseDetector = ({ onClose }) => {
       }
     };
     loadModel();
+    startCamera();
   }, []);
 
-  useEffect(() => {
-    if (model) {
-      startCamera();
-    }
-  }, [model]);
+
 
   const startCamera = async () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -165,19 +161,27 @@ const CameraPoseDetector = ({ onClose }) => {
           </div>
         </div>
 
-        {/* Camera Preview */}
-        <div className="relative aspect-video bg-black">
-          <video ref={videoRef} className="hidden" />
-          <canvas ref={canvasRef} className="w-full h-full rounded-b-2xl" />
-          
-          {/* Overlay Elements */}
-          <div className="absolute top-4 left-4 bg-black/50 px-4 py-2 rounded-lg">
-            <span className="text-green-400">● LIVE</span>
-          </div>
-          <div className="absolute bottom-4 left-4 bg-black/50 px-4 py-2 rounded-lg">
-            <span className="text-sm">AI Confidence: 98%</span>
-          </div>
-        </div>
+{/* Camera Preview */}
+<div className="relative aspect-video bg-black rounded-b-2xl overflow-hidden">
+  <div className="relative w-full h-full">
+    <video
+      ref={videoRef}
+      className="w-full h-full object-cover absolute inset-0"
+      autoPlay
+      playsInline
+    />
+    <canvas ref={canvasRef} className="w-full h-full absolute inset-0" />
+  </div>
+
+  {/* Overlay Elements */}
+  <div className="absolute top-4 left-4 bg-black/50 px-4 py-2 rounded-lg">
+    <span className="text-green-400">● LIVE</span>
+  </div>
+  <div className="absolute bottom-4 left-4 bg-black/50 px-4 py-2 rounded-lg">
+    <span className="text-sm">AI Confidence: 98%</span>
+  </div>
+</div>
+
 
         {/* Stats Footer */}
         <div className="p-6 flex items-center justify-between">

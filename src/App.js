@@ -3,13 +3,14 @@ import CameraPoseDetector from "./CameraPoseDetector";
 import { motion, AnimatePresence } from "framer-motion";
 import Leaderboard from "./Leaderboard";
 import VoiceCommands from "./VoiceCommands";
+import Auth from "./Auth";
 
 function App() {
   const [cameraEnabled, setCameraEnabled] = useState(false);
-  const [exerciseType, setExerciseType] = useState("squats"); // Default exercise
-  const [feedback, setFeedback] = useState("Get ready to flex!"); // Feedback for the user
+  const [exerciseType, setExerciseType] = useState("squats");
+  const [feedback, setFeedback] = useState("Get ready to flex!");
+  const [user, setUser] = useState(null);
 
-  // Handle voice commands
   const handleCommand = (command) => {
     if (command.includes("start squats")) {
       setExerciseType("squats");
@@ -37,6 +38,9 @@ function App() {
             AI-Powered Fitness Revolution
           </p>
         </motion.header>
+
+        {/* Auth */}
+        <Auth user={user} setUser={setUser} />
 
         {/* Voice Commands */}
         <VoiceCommands onCommand={handleCommand} />
